@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Switch, Route, useLocation } from "wouter";
+import { Switch, Route, useLocation, useRoute } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -7,12 +7,30 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import CustomCursor from "./components/CustomCursor";
 import { useTheme } from "./context/ThemeContext";
-import { PageTransition } from "./hooks/usePageTransition";
+import usePageTransition, { TransitionType } from "./hooks/usePageTransition";
 import { useSmoothScroll } from "./hooks/useSmoothScroll";
 
 function Router() {
   const [location] = useLocation();
   const { handleAnchorClick } = useSmoothScroll();
+  const [isHome] = useRoute("/");
+  
+  // Use our enhanced page transitions
+  const { 
+    PageTransition, 
+    transitionType, 
+    transitionDuration,
+    selectRandomParallaxTransition,
+    setOverlay
+  } = usePageTransition('parallax-up', 0.7);
+  
+  // Change transition effect on route change
+  useEffect(() => {
+    // Select a random parallax effect
+    selectRandomParallaxTransition();
+    // Enable overlay for transitions between pages
+    setOverlay(true);
+  }, [location, selectRandomParallaxTransition, setOverlay]);
   
   // Handle smooth scrolling for all anchor links
   useEffect(() => {
@@ -35,7 +53,14 @@ function Router() {
   }, [handleAnchorClick]);
   
   return (
-    <PageTransition location={location} transitionType="fade" duration={0.6}>
+    <PageTransition 
+      location={location} 
+      transitionType={transitionType} 
+      duration={transitionDuration}
+      overlay={true}
+      overlayColor="rgba(0, 0, 0, 0.6)"
+      overlayOpacity={0.6}
+    >
       <Switch>
         <Route path="/" component={Home} />
         <Route component={NotFound} />

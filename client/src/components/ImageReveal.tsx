@@ -103,9 +103,9 @@ const ImageReveal: React.FC<ImageRevealProps> = ({
         animate={isInView ? 'visible' : 'hidden'}
         variants={clipPathAnimation}
         transition={{
-          duration,
+          duration: duration * 0.9, // Slightly quicker to feel more snappy
           delay,
-          ease: "easeInOut",
+          ease: [0.645, 0.045, 0.355, 1], // Smooth cubic bezier
         }}
         className="w-full h-full relative"
       >
@@ -119,9 +119,9 @@ const ImageReveal: React.FC<ImageRevealProps> = ({
           }}
           animate={isInView ? { x: 0, y: 0 } : getInitialPosition()}
           transition={{
-            duration: duration * 1.5,
-            delay: delay + 0.1,
-            ease: "easeOut",
+            duration: duration * 1.3,
+            delay: delay + 0.05, // Slightly quicker start
+            ease: [0.25, 0.1, 0.25, 1], // Smooth, natural motion
           }}
         >
           <img

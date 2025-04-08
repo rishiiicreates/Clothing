@@ -11,7 +11,10 @@ export type TransitionType =
   | 'rotate'
   | 'flip'
   | 'blur'
-  | 'wipe';
+  | 'wipe'
+  | 'parallax-up'
+  | 'parallax-down'
+  | 'parallax-zoom';
 
 interface PageTransitionProps {
   children: React.ReactNode;
@@ -19,6 +22,9 @@ interface PageTransitionProps {
   transitionType?: TransitionType;
   duration?: number;
   bgColor?: string;
+  overlay?: boolean;
+  overlayColor?: string;
+  overlayOpacity?: number;
 }
 
 // Page transition component for route changes
@@ -27,7 +33,10 @@ export const PageTransition = ({
   location,
   transitionType = 'fade',
   duration = 0.5,
-  bgColor = 'rgba(255, 107, 0, 1)'
+  bgColor = 'rgba(255, 107, 0, 1)',
+  overlay = false,
+  overlayColor = 'rgba(0, 0, 0, 0.5)',
+  overlayOpacity = 0.7
 }: PageTransitionProps) => {
   // Variants for different transition types
   const variants = {
@@ -80,11 +89,32 @@ export const PageTransition = ({
       initial: { clipPath: 'polygon(0 0, 0 0, 0 100%, 0% 100%)' },
       animate: { clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)' },
       exit: { clipPath: 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)' }
+    },
+    'parallax-up': {
+      initial: { opacity: 0, y: 100, scale: 1.1 },
+      animate: { opacity: 1, y: 0, scale: 1 },
+      exit: { opacity: 0, y: -100, scale: 0.9 }
+    },
+    'parallax-down': {
+      initial: { opacity: 0, y: -100, scale: 1.1 },
+      animate: { opacity: 1, y: 0, scale: 1 },
+      exit: { opacity: 0, y: 100, scale: 0.9 }
+    },
+    'parallax-zoom': {
+      initial: { opacity: 0, scale: 1.4 },
+      animate: { opacity: 1, scale: 1 },
+      exit: { opacity: 0, scale: 0.6 }
     }
   };
 
   // Get the appropriate variant
-  const variant = variants[transitionType];
+  const variant = variants[transitionType as keyof typeof variants] || variants.fade;
+  
+  // Determine if this is a parallax transition
+  const isParallaxTransition = 
+    transitionType === 'parallax-up' || 
+    transitionType === 'parallax-down' || 
+    transitionType === 'parallax-zoom';
 
   return (
     <AnimatePresence mode="wait">
@@ -95,15 +125,27 @@ export const PageTransition = ({
         exit="exit"
         variants={variant}
         transition={{ 
-          duration, 
-          ease: "easeOut" 
+          duration: isParallaxTransition ? duration * 1.4 : duration, 
+          ease: isParallaxTransition ? [0.25, 0.1, 0.25, 1] : "easeOut" 
         }}
-        className="w-full h-full"
+        className="w-full h-full relative"
       >
         {/* Page content */}
         {children}
         
-        {/* Full-screen overlay for transitions (optional) */}
+        {/* Overlay animation for parallax transitions */}
+        {(isParallaxTransition && overlay) && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: overlayOpacity }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: duration * 0.8 }}
+            className="fixed inset-0 z-10 pointer-events-none"
+            style={{ backgroundColor: overlayColor }}
+          />
+        )}
+        
+        {/* Full-screen overlay for wipe transitions */}
         <AnimatePresence>
           {transitionType === 'wipe' && (
             <motion.div
@@ -134,6 +176,16 @@ export const usePageTransition = (
 ) => {
   const [transitionType, setTransitionType] = useState<TransitionType>(defaultTransition);
   const [transitionDuration, setTransitionDuration] = useState<number>(defaultDuration);
+  const [overlay, setOverlay] = useState(false);
+  const [overlayColor, setOverlayColor] = useState('rgba(0, 0, 0, 0.5)');
+  const [overlayOpacity, setOverlayOpacity] = useState(0.7);
+
+  // Select a random transition effect for parallax animations
+  const selectRandomParallaxTransition = () => {
+    const parallaxTransitions: TransitionType[] = ['parallax-up', 'parallax-down', 'parallax-zoom'];
+    const randomIndex = Math.floor(Math.random() * parallaxTransitions.length);
+    setTransitionType(parallaxTransitions[randomIndex]);
+  };
 
   useEffect(() => {
     // Reset scroll position on page change
@@ -145,6 +197,13 @@ export const usePageTransition = (
     transitionDuration,
     setTransitionType,
     setTransitionDuration,
+    selectRandomParallaxTransition,
+    overlay,
+    setOverlay,
+    overlayColor,
+    setOverlayColor,
+    overlayOpacity,
+    setOverlayOpacity,
     PageTransition
   };
 };

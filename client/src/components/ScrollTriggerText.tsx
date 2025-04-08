@@ -82,9 +82,9 @@ const ScrollTriggerText: React.FC<TextProps> = ({
       y: 0,
       opacity: 1,
       transition: {
-        duration,
+        duration: duration * 1.2,
         delay: delay + i * staggerChildren,
-        ease: "easeOut",
+        ease: [0.215, 0.61, 0.355, 1], // Improved cubic-bezier for smoother motion
       },
     }),
   };
@@ -100,9 +100,9 @@ const ScrollTriggerText: React.FC<TextProps> = ({
       opacity: 1,
       rotateX: 0,
       transition: {
-        duration: duration * 0.8,
+        duration: duration * 0.9,
         delay: delay + i * staggerChildren,
-        ease: "easeOut",
+        ease: [0.34, 1.56, 0.64, 1], // Spring-like effect with slight overshoot
       },
     }),
   };
@@ -112,35 +112,39 @@ const ScrollTriggerText: React.FC<TextProps> = ({
     visible: {
       opacity: 1,
       transition: {
-        duration,
+        duration: duration * 1.1,
         delay,
-        ease: 'easeOut',
+        ease: [0.25, 0.1, 0.25, 1], // Smooth fade in
       },
     },
   };
 
   const slideUpVariants = {
-    hidden: { opacity: 0, y: 50 },
+    hidden: { opacity: 0, y: 40, scale: 0.98 },
     visible: {
       opacity: 1,
       y: 0,
+      scale: 1,
       transition: {
-        duration,
+        opacity: { duration: duration * 0.8, ease: [0.25, 0.1, 0.25, 1] },
+        y: { duration: duration, ease: [0.165, 0.84, 0.44, 1] }, // Optimized ease-out-cubic
+        scale: { duration: duration * 1.2, ease: [0.165, 0.84, 0.44, 1] },
         delay,
-        ease: "easeOut",
       },
     },
   };
 
   const slideDownVariants = {
-    hidden: { opacity: 0, y: -50 },
+    hidden: { opacity: 0, y: -40, scale: 0.98 },
     visible: {
       opacity: 1,
       y: 0,
+      scale: 1,
       transition: {
-        duration,
+        opacity: { duration: duration * 0.8, ease: [0.25, 0.1, 0.25, 1] },
+        y: { duration: duration, ease: [0.165, 0.84, 0.44, 1] },
+        scale: { duration: duration * 1.2, ease: [0.165, 0.84, 0.44, 1] },
         delay,
-        ease: "easeOut",
       },
     },
   };
@@ -153,9 +157,9 @@ const ScrollTriggerText: React.FC<TextProps> = ({
     visible: {
       backgroundSize: '100% 100%',
       transition: {
-        duration: duration * 1.5,
+        duration: duration * 1.8,
         delay,
-        ease: "easeOut",
+        ease: [0.25, 0.8, 0.25, 1], // Smooth acceleration and deceleration
       },
     },
   };
