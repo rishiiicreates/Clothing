@@ -69,10 +69,10 @@ export const useSmoothScroll = () => {
   
   // Handle anchor links smoothly
   const handleAnchorClick = useCallback((
-    e: React.MouseEvent<HTMLAnchorElement>, 
+    e: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<Element>, 
     options: SmoothScrollOptions = {}
   ) => {
-    const href = e.currentTarget.getAttribute('href');
+    const href = (e.currentTarget as HTMLAnchorElement).getAttribute('href');
     
     if (href && href.startsWith('#') && href !== '#') {
       e.preventDefault();

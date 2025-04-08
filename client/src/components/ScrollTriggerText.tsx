@@ -69,99 +69,319 @@ const ScrollTriggerText: React.FC<TextProps> = ({
       transition: {
         staggerChildren,
         delayChildren: delay,
+        staggerDirection: 1,
+        when: "beforeChildren",
       },
     },
   };
 
+  // Advanced cubic-bezier curves for cinematic-grade animations
+  const eases = {
+    // Premium smooth-out with refined anticipation
+    premium: [0.25, 0.1, 0.25, 1.03], 
+    
+    // Organic bounce effect with perfect naturalism
+    bounce: [0.175, 0.885, 0.32, 1.275],
+    
+    // Professionally timed ease for fluid text movements
+    swift: [0.19, 1, 0.22, 1],
+    
+    // Ultra-refined overshoot with precision fall-off
+    polished: [0.34, 1.28, 0.64, 1],
+    
+    // Imperceptible acceleration for luxury brand feel
+    luxury: [0.6, 0.01, 0.05, 0.95],
+    
+    // Cinema-grade dramatic reveal timing
+    cinematic: [0.33, 0.9, 0.25, 0.99],
+    
+    // Silk-smooth deceleration (ideal for important content)
+    silk: [0.4, 0, 0.2, 1],
+    
+    // Perfect text reveal with professional timing
+    textReveal: [0.25, 0.5, 0.5, 0.95]
+  };
+
+  // Enhanced word animation with more refined movement
   const wordVariants = {
     hidden: {
-      y: 100,
+      y: 105,
       opacity: 0,
-    },
-    visible: (i: number) => ({
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: duration * 1.2,
-        delay: delay + i * staggerChildren,
-        ease: [0.215, 0.61, 0.355, 1], // Improved cubic-bezier for smoother motion
-      },
-    }),
-  };
-
-  const charVariants = {
-    hidden: {
-      y: 50,
-      opacity: 0,
-      rotateX: -20,
+      rotateX: -15,
+      filter: "blur(3px)",
+      scale: 0.95,
     },
     visible: (i: number) => ({
       y: 0,
       opacity: 1,
       rotateX: 0,
+      filter: "blur(0px)",
+      scale: 1,
       transition: {
-        duration: duration * 0.9,
+        // Modified spring physics for more natural word motion
+        type: "spring",
+        damping: 22,
+        stiffness: 90,
+        mass: 0.6,
         delay: delay + i * staggerChildren,
-        ease: [0.34, 1.56, 0.64, 1], // Spring-like effect with slight overshoot
+        // Independent property transitions for more control
+        opacity: { 
+          duration: duration * 0.7, 
+          ease: eases.silk 
+        },
+        filter: { 
+          duration: duration * 0.5, 
+          ease: "linear" 
+        },
+        scale: {
+          duration: duration * 1.1,
+          ease: eases.polished
+        }
       },
     }),
   };
 
+  // Enhanced character animation with microinteractions
+  const charVariants = {
+    hidden: {
+      y: 40,
+      opacity: 0,
+      rotateX: -25,
+      filter: "blur(2px)",
+      scale: 0.85,
+    },
+    visible: (i: number) => ({
+      y: 0,
+      opacity: 1,
+      rotateX: 0,
+      filter: "blur(0px)",
+      scale: 1,
+      transition: {
+        // More refined spring physics for characters
+        type: "spring",
+        stiffness: 420,
+        damping: 32,
+        mass: 0.8,
+        delay: delay + i * staggerChildren,
+        // Property-specific transitions
+        opacity: { 
+          duration: duration * 0.5, 
+          ease: eases.silk,
+          delay: delay + (i * staggerChildren * 0.9) // Slightly quicker opacity transition
+        },
+        filter: { 
+          duration: duration * 0.4, 
+          ease: "linear" 
+        },
+        scale: {
+          type: "spring",
+          stiffness: 500,
+          damping: 25,
+          delay: delay + (i * staggerChildren)
+        }
+      },
+    }),
+  };
+
+  // Enhanced fade animation with more subtle and professional motion
   const fadeVariants = {
-    hidden: { opacity: 0 },
+    hidden: { 
+      opacity: 0,
+      filter: "blur(4px)",
+      scale: 0.98,
+      transformOrigin: "center",
+      rotateX: -2, // Subtle depth effect
+    },
     visible: {
       opacity: 1,
+      filter: "blur(0px)",
+      scale: 1,
+      rotateX: 0,
       transition: {
-        duration: duration * 1.1,
+        // Sophisticated orchestration of properties
+        duration: duration * 1.2,
         delay,
-        ease: [0.25, 0.1, 0.25, 1], // Smooth fade in
+        ease: eases.silk, // Better for fade animations
+        
+        // Property-specific transitions
+        opacity: { 
+          duration: duration * 0.9, 
+          ease: eases.luxury,
+          delay // Maintain delay
+        },
+        filter: { 
+          duration: duration * 0.75, 
+          ease: [0.4, 0, 0.2, 1] // Custom ease for blur
+        },
+        scale: { 
+          duration: duration * 1.3, 
+          ease: eases.textReveal 
+        },
+        rotateX: {
+          duration: duration * 1.4,
+          ease: eases.polished
+        }
       },
     },
   };
 
+  // Enhanced slide-up with sophisticated physics and micro movements
   const slideUpVariants = {
-    hidden: { opacity: 0, y: 40, scale: 0.98 },
+    hidden: { 
+      opacity: 0, 
+      y: 35, 
+      scale: 0.97,
+      filter: "blur(5px)",
+      rotateX: -4, // Slight 3D perspective tilt
+    },
     visible: {
       opacity: 1,
       y: 0,
       scale: 1,
+      filter: "blur(0px)",
+      rotateX: 0,
       transition: {
-        opacity: { duration: duration * 0.8, ease: [0.25, 0.1, 0.25, 1] },
-        y: { duration: duration, ease: [0.165, 0.84, 0.44, 1] }, // Optimized ease-out-cubic
-        scale: { duration: duration * 1.2, ease: [0.165, 0.84, 0.44, 1] },
+        // Overall timing
         delay,
+        
+        // Property-specific transitions
+        opacity: { 
+          duration: duration * 0.7, 
+          ease: eases.silk,
+          delay: delay + (duration * 0.1) // Slightly delayed for better sequencing
+        },
+        y: { 
+          type: "spring", 
+          stiffness: 210, // Lower stiffness for smoother motion
+          damping: 26,
+          mass: 0.75 // Lighter mass
+        },
+        scale: { 
+          duration: duration * 1.25, 
+          ease: eases.polished 
+        },
+        filter: { 
+          duration: duration * 0.5, 
+          ease: "linear" 
+        },
+        rotateX: {
+          duration: duration * 1.3,
+          ease: eases.textReveal
+        }
       },
     },
   };
 
+  // Enhanced slide-down with sophisticated physics and micro movements
   const slideDownVariants = {
-    hidden: { opacity: 0, y: -40, scale: 0.98 },
+    hidden: { 
+      opacity: 0, 
+      y: -35, 
+      scale: 0.97,
+      filter: "blur(5px)",
+      rotateX: 4, // Opposite tilt direction from slide-up
+    },
     visible: {
       opacity: 1,
       y: 0,
       scale: 1,
+      filter: "blur(0px)",
+      rotateX: 0,
       transition: {
-        opacity: { duration: duration * 0.8, ease: [0.25, 0.1, 0.25, 1] },
-        y: { duration: duration, ease: [0.165, 0.84, 0.44, 1] },
-        scale: { duration: duration * 1.2, ease: [0.165, 0.84, 0.44, 1] },
+        // Overall timing
         delay,
+        
+        // Property-specific transitions
+        opacity: { 
+          duration: duration * 0.7, 
+          ease: eases.silk,
+          delay: delay + (duration * 0.1) // Slightly delayed for better sequencing
+        },
+        y: { 
+          type: "spring", 
+          stiffness: 210, // Lower stiffness for smoother motion
+          damping: 26,
+          mass: 0.75 // Lighter mass
+        },
+        scale: { 
+          duration: duration * 1.25, 
+          ease: eases.polished 
+        },
+        filter: { 
+          duration: duration * 0.5, 
+          ease: "linear" 
+        },
+        rotateX: {
+          duration: duration * 1.3,
+          ease: eases.textReveal
+        }
       },
     },
   };
 
+  // Enhanced highlight animation with premium motion design techniques
   const highlightVariants = {
     hidden: { 
       backgroundSize: '0% 100%',
-      backgroundPosition: 'left'
+      backgroundPosition: 'left',
+      opacity: 0.85,
+      filter: "contrast(0.98) brightness(0.98)",
+      y: 3, // Subtle shift for depth
+      scale: 0.995, // Micro-scaling
     },
     visible: {
       backgroundSize: '100% 100%',
+      backgroundPosition: 'left',
+      opacity: 1,
+      filter: "contrast(1) brightness(1)",
+      y: 0,
+      scale: 1,
       transition: {
+        // Overall timing
         duration: duration * 1.8,
         delay,
-        ease: [0.25, 0.8, 0.25, 1], // Smooth acceleration and deceleration
+        
+        // Property-specific transitions
+        backgroundSize: {
+          duration: duration * 2,
+          delay: delay + (duration * 0.1), // Slight delay for better sequencing
+          ease: eases.textReveal, // Better for text highlights
+        },
+        opacity: {
+          duration: duration * 0.8,
+          ease: eases.premium,
+          delay // Maintain delay
+        },
+        filter: {
+          duration: duration * 1.6,
+          ease: eases.silk
+        },
+        scale: {
+          duration: duration * 1.4,
+          ease: eases.polished
+        },
+        y: {
+          duration: duration * 1.2,
+          ease: eases.luxury
+        }
       },
     },
+  };
+  
+  // Enhanced styling for highlight variant
+  const getHighlightStyle = () => {
+    if (animation !== 'highlight') return {};
+    
+    return {
+      backgroundPosition: 'left bottom',
+      backgroundSize: isInView ? '100% 40%' : '0% 40%',
+      // Additional styles for a more polished highlight effect
+      transition: `filter ${duration * 0.6}s ${eases.luxury}, 
+                  transform ${duration * 0.8}s ${eases.polished}`,
+      display: 'inline-block',
+      padding: '0 0.1em',
+      margin: '0 -0.1em'
+    };
   };
 
   // Get appropriate variants based on animation type
@@ -201,10 +421,7 @@ const ScrollTriggerText: React.FC<TextProps> = ({
       initial="hidden"
       animate={isInView ? 'visible' : 'hidden'}
       variants={getVariants()}
-      style={animation === 'highlight' ? {
-        backgroundPosition: 'left bottom',
-        backgroundSize: isInView ? '100% 40%' : '0% 40%',
-      } : {}}
+      style={getHighlightStyle()}
     >
       {processContent()}
     </Component>

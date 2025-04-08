@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 import { Search, Menu, ShoppingBag, X, User, Heart } from 'lucide-react';
 import { useSmoothScroll } from '../hooks/useSmoothScroll';
 
@@ -7,7 +7,28 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [cartCount, setCartCount] = useState(2);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const { handleAnchorClick } = useSmoothScroll();
+  
+  // Detect scroll direction to show/hide navbar
+  const { scrollY } = useScroll();
+  
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    // Determine if scrolling up or down
+    const scrollingDown = latest > lastScrollY;
+    const scrollAmount = Math.abs(latest - lastScrollY);
+    
+    // Only trigger hide/show for significant scroll amounts (prevents flickering)
+    if (scrollAmount > 10) {
+      setIsVisible(!scrollingDown || latest < 50);
+    }
+    
+    // Set scrolled state for styling
+    setIsScrolled(latest > 20);
+    setLastScrollY(latest);
+  });
 
   return (
     <>
@@ -18,10 +39,17 @@ const Navbar = () => {
       
       {/* Main Navigation */}
       <motion.nav 
-        className="bg-white shadow-sm sticky top-0 z-50"
+        className={`${isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-md' : 'bg-white'} 
+          sticky top-0 z-50 transition-all duration-300`}
         initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.3 }}
+        animate={{ 
+          y: isVisible ? 0 : -100,
+          opacity: isVisible ? 1 : 0,
+        }}
+        transition={{ 
+          duration: 0.3, 
+          ease: [0.22, 1, 0.36, 1] 
+        }}
       >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16 md:h-20">
@@ -145,13 +173,19 @@ const Navbar = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
             >
               <motion.div
                 className="bg-white h-full w-3/4 max-w-sm shadow-xl"
-                initial={{ x: "-100%" }}
-                animate={{ x: 0 }}
-                exit={{ x: "-100%" }}
-                transition={{ type: "tween" }}
+                initial={{ x: "-100%", opacity: 0.5 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: "-100%", opacity: 0 }}
+                transition={{ 
+                  type: "spring", 
+                  damping: 25, 
+                  stiffness: 300,
+                  opacity: { duration: 0.2 }
+                }}
               >
                 <div className="flex justify-between items-center p-4 border-b">
                   <span className="font-bold text-lg">Menu</span>
@@ -163,63 +197,74 @@ const Navbar = () => {
                   </button>
                 </div>
                 
-                <div className="py-4">
-                  <a 
-                    href="#" 
-                    className="block px-4 py-3 hover:bg-gray-100" 
-                    onClick={(e) => {
+                <motion.div 
+                  className="py-4"
+                  initial="closed"
+                  animate="open"
+                  variants={{
+                    open: {
+                      transition: {
+                        staggerChildren: 0.07,
+                        delayChildren: 0.1
+                      }
+                    },
+                    closed: {
+                      transition: {
+                        staggerChildren: 0.05,
+                        staggerDirection: -1
+                      }
+                    }
+                  }}
+                >
+                  {[
+                    { href: "#", label: "Home", onClick: (e: React.MouseEvent<HTMLAnchorElement>) => {
                       e.preventDefault();
                       setIsMobileMenuOpen(false);
                       window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }}
-                  >
-                    Home
-                  </a>
-                  <a 
-                    href="#collection" 
-                    className="block px-4 py-3 hover:bg-gray-100" 
-                    onClick={(e) => {
+                    }},
+                    { href: "#collection", label: "Collection", onClick: (e: React.MouseEvent<HTMLAnchorElement>) => {
                       handleAnchorClick(e, { offset: 80, duration: 800 });
                       setIsMobileMenuOpen(false);
-                    }}
-                  >
-                    Collection
-                  </a>
-                  <a 
-                    href="#about" 
-                    className="block px-4 py-3 hover:bg-gray-100" 
-                    onClick={(e) => {
+                    }},
+                    { href: "#about", label: "About", onClick: (e: React.MouseEvent<HTMLAnchorElement>) => {
                       handleAnchorClick(e, { offset: 80, duration: 800 });
                       setIsMobileMenuOpen(false);
-                    }}
-                  >
-                    About
-                  </a>
-                  <a 
-                    href="#contact" 
-                    className="block px-4 py-3 hover:bg-gray-100" 
-                    onClick={(e) => {
+                    }},
+                    { href: "#contact", label: "Contact", onClick: (e: React.MouseEvent<HTMLAnchorElement>) => {
                       handleAnchorClick(e, { offset: 80, duration: 800 });
                       setIsMobileMenuOpen(false);
-                    }}
-                  >
-                    Contact
-                  </a>
-                  <a 
-                    href="#" 
-                    className="block px-4 py-3 hover:bg-gray-100" 
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Account
-                  </a>
-                  <a 
-                    href="#" 
-                    className="block px-4 py-3 hover:bg-gray-100" 
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Wishlist
-                  </a>
-                </div>
+                    }},
+                    { href: "#", label: "Account", onClick: () => setIsMobileMenuOpen(false) },
+                    { href: "#", label: "Wishlist", onClick: () => setIsMobileMenuOpen(false) }
+                  ].map((item, index) => (
+                    <motion.a
+                      key={index}
+                      href={item.href}
+                      className="block px-4 py-3 hover:bg-gray-100"
+                      onClick={item.onClick}
+                      variants={{
+                        open: { 
+                          opacity: 1, 
+                          y: 0,
+                          transition: {
+                            type: "spring",
+                            stiffness: 300,
+                            damping: 24
+                          }
+                        },
+                        closed: { 
+                          opacity: 0, 
+                          y: 20,
+                          transition: {
+                            duration: 0.2
+                          }
+                        }
+                      }}
+                    >
+                      {item.label}
+                    </motion.a>
+                  ))}
+                </motion.div>
               </motion.div>
             </motion.div>
           )}
