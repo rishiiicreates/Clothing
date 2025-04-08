@@ -69,7 +69,7 @@ export const PageTransition = ({
   location,
   transitionType = 'fade',
   duration = 0.5,
-  bgColor = '#FF87B7',
+  bgColor = 'rgba(0,0,0,0.5)',
   overlay = false,
   overlayColor = 'rgba(0, 0, 0, 0.5)',
   overlayOpacity = 0.7
