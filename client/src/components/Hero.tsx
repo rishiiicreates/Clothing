@@ -49,25 +49,15 @@ const Hero = () => {
         </motion.div>
         
         <div className="hero-img-container">
-          <motion.div
-            initial={{ clipPath: 'polygon(0 0, 0 0, 0 100%, 0% 100%)' }}
-            animate={{ 
-              clipPath: isLoaded ? 'polygon(0 0, 100% 0, 100% 100%, 0 100%)' : 'polygon(0 0, 0 0, 0 100%, 0% 100%)'
-            }}
-            transition={{ duration: 1, ease: "easeInOut" }}
-            className="absolute inset-0 overflow-hidden"
-          >
-            <motion.img
+          <div className="overflow-hidden">
+            <img
               src={fashionModel}
               alt="Fashion model"
               className="hero-img"
-              style={{ scale: imgScale }}
-              initial={{ scale: 1.1 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 1.5, ease: "easeOut" }}
+              style={{ objectFit: 'cover', height: '70vh', borderRadius: '10px' }}
               data-magnetic="true"
             />
-          </motion.div>
+          </div>
           
           <motion.div 
             className="hero-plus"
