@@ -93,7 +93,7 @@ function App() {
   
   return (
     <QueryClientProvider client={queryClient}>
-      <div className={`${theme === 'dark' ? 'dark' : ''}`}>
+      <div className={`${theme === 'dark' ? 'dark' : ''} m-0 p-0 overflow-x-hidden`}>
         {cursorVisible && <CustomCursor />}
         <Router />
         <Toaster />

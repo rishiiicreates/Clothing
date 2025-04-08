@@ -32,8 +32,8 @@ const Navbar = () => {
 
   return (
     <>
-      {/* Top Announcement Bar */}
-      <div className="bg-black text-white text-center py-2 text-sm">
+      {/* Top Announcement Bar - Fixed position to avoid layout shifts */}
+      <div className="bg-black text-white text-center py-2 text-sm w-full top-0 left-0 right-0 m-0 z-40">
         Free shipping on all orders over $75
       </div>
       

@@ -21,7 +21,7 @@ const Home = () => {
   });
   
   return (
-    <div className="min-h-screen bg-white relative">
+    <div className="min-h-screen bg-white relative overflow-hidden p-0 m-0">
       {/* Progress bar */}
       <motion.div
         className="fixed top-0 left-0 right-0 h-1 bg-orange-500 origin-left z-50"
@@ -30,7 +30,7 @@ const Home = () => {
       
       <Navbar />
       
-      <main ref={mainRef}>
+      <main ref={mainRef} className="p-0 m-0">
         <Hero />
         <Collection />
         <Lookbook />

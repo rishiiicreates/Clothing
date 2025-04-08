@@ -1,4 +1,5 @@
-* {
+/* Reset only for hero component elements */
+.hero, .hero-left, .hero-right, .hero-content {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
