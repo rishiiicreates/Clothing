@@ -5,8 +5,8 @@ import { MagneticButton } from "./ui/magnetic-button";
 import ScrollTriggerText from "./ScrollTriggerText";
 import ImageReveal from "./ImageReveal";
 import { ParallaxLayer } from "./ParallaxSection";
-import fashionModel from "../assets/images/fashion-model.jpeg";
-import fashionModel2 from "../assets/images/fashion-model2.jpeg";
+import fashionModel from "../assets/images/IMG_0916.jpeg";
+import fashionModel2 from "../assets/images/IMG_0899.jpeg";
 import { useParallax } from "../hooks/useParallax";
 
 const Hero = () => {
