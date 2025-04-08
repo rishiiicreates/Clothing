@@ -158,9 +158,16 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-gray-200 dark:border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 md:mb-0">
-            &copy; {new Date().getFullYear()} Sketch & Stitch. All rights reserved.
-          </p>
+          <div className="flex flex-col">
+            <p className="text-gray-600 dark:text-gray-400 text-sm mb-1">
+              &copy; {new Date().getFullYear()} Sketch & Stitch. All rights reserved.
+            </p>
+            <div className="flex items-center space-x-2 mb-4 md:mb-0 text-sm">
+              <span className="text-[#FF5C99] dark:text-[#FF87B7] font-medium">#rishiicreates</span>
+              <span className="text-gray-400">•</span>
+              <span className="text-gray-600 dark:text-gray-400 italic">made with a lot of coffee ☕</span>
+            </div>
+          </div>
           <div className="flex items-center space-x-4">
             <a 
               href="#" 
