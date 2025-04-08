@@ -1,0 +1,181 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.hero {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  font-family: 'Helvetica Neue', sans-serif;
+}
+
+.hero-left,
+.hero-right {
+  flex: 1;
+  position: relative;
+}
+
+.hero-left {
+  background-color: #f4f4f4;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.hero-counter {
+  font-size: 60px;
+  transform: rotate(-90deg);
+  position: absolute;
+  left: 10px;
+  top: 40%;
+  font-weight: bold;
+}
+
+.hero-img-container {
+  position: relative;
+}
+
+.hero-img {
+  height: 70vh;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.hero-plus {
+  position: absolute;
+  left: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+  background: white;
+  border-radius: 50%;
+  padding: 6px 10px;
+  font-weight: bold;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.hero-price {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #111;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.color-selector {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.white {
+  background-color: #fff;
+  border: 1px solid #ccc;
+}
+
+.gray {
+  background-color: #888;
+}
+
+.orange {
+  background-color: #ff6333;
+}
+
+.hero-right {
+  background-color: #fff;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hero-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hero-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  font-weight: 500;
+}
+
+.hero-nav li.active {
+  font-weight: bold;
+  border-bottom: 2px solid #000;
+}
+
+.nav-icons span {
+  font-size: 20px;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.hero-content h1 {
+  font-size: 40px;
+  margin-bottom: 20px;
+}
+
+.hero-content p {
+  max-width: 400px;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+.explore-btn {
+  background: #ff6333;
+  border: none;
+  padding: 10px 24px;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.explore-btn:hover {
+  background: #e65328;
+}
+
+.bottom-card {
+  display: flex;
+  gap: 30px;
+  background: #1e1e1e;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.bottom-card div {
+  max-width: 200px;
+}
+
+.bottom-card span {
+  font-size: 18px;
+  color: #ff6333;
+  font-weight: bold;
+}
+
+.active-card {
+  background: #333;
+  padding: 10px;
+  border-radius: 10px;
+}

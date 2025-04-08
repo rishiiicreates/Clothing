@@ -1,0 +1,72 @@
+Build a visually captivating, modern website for a fashion clothing brand that merges high-end design with artistic creativity and interactivity. Follow these instructions:
+
+⸻
+
+Visual Aesthetic
+	•	Use a paper-like textured background to give an organic, analog vibe.
+	•	Combine doodled/hand-drawn typography and icons throughout the site for a sketchbook-style brand identity.
+	•	Employ a vibrant yet soft-light color palette (pastel neons, glowing gradients, creamy whites).
+	•	Keep a modern, clean, and minimal layout, emphasizing negative space and strong typography.
+	•	Ensure consistent branding through a design system (spacing, font sizes, color scales, button styles, etc.).
+
+⸻
+
+Interactive Elements & Animations
+	•	Use GSAP (GreenSock) and/or Framer Motion for:
+	•	Scroll-triggered animations.
+	•	Smooth page/section transitions.
+	•	Parallax effects on images, text, and backgrounds.
+	•	3D transitions for elements like cards and buttons.
+	•	Implement a custom animated cursor (e.g., expands on hover, reacts to buttons or images).
+	•	Add lazy loading and entrance animations for each section on scroll.
+
+⸻
+
+Website Structure
+	1.	Sticky Navigation Bar
+	•	Animated doodle-style logo.
+	•	Smooth-scroll links or route-based links.
+	•	Hamburger menu with slide-in animation on mobile.
+	2.	Hero Section
+	•	Fullscreen hero with animated text (hand-drawn style).
+	•	Call-to-action buttons with 3D hover effects.
+	•	Optional video or image reveal animation.
+	3.	About the Brand
+	•	Split or grid layout.
+	•	Storytelling with parallax images and timeline-style doodles or icons.
+	•	Values or mission in animated cards.
+	4.	Collection Preview
+	•	Filterable product grid (e.g., Men, Women, Streetwear).
+	•	3D hover effect on cards.
+	•	Smooth animations on load and scroll.
+	5.	Lookbook / Gallery
+	•	Fullscreen, swipeable or scrollable section.
+	•	Lightbox view with animated open/close.
+	•	Parallax background and layered foreground visuals.
+	6.	Testimonials / Brand Reviews
+	•	Animated quote cards or carousel with fade transitions.
+	7.	Newsletter Signup + Contact Form
+	•	Minimal design with doodle-style input fields.
+	•	Animated send button with form validation.
+	8.	Footer
+	•	Animated social icons, sketchy brand logo.
+	•	Quick links with hover underline effects.
+	•	Optionally include dark mode toggle with smooth transition.
+
+⸻
+
+Technical Stack
+	•	React (18+)
+	•	TailwindCSS for utility-first styling.
+	•	GSAP + Framer Motion for animations and transitions.
+	•	Responsive Design (Desktop, Tablet, Mobile).
+	•	Lazy loading and performance optimization.
+	•	SEO-ready: include metadata, favicon, and OG tags.
+	•	Dark Mode Toggle (optional).
+	•	Set up routing with smooth transitions (/home, /collection, /about, etc.) OR build a single-scroll landing page (smooth-scroll).
+
+⸻
+
+Optional (Phase 2)
+	•	Add basic eCommerce capability (Stripe or Snipcart).
+	•	Include CMS integration (like Sanity or Contentful) for dynamic content updates.

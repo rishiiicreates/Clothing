@@ -1,0 +1,302 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply antialiased bg-background text-foreground;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    letter-spacing: 0.02em;
+    overflow-x: hidden;
+  }
+
+  body::-webkit-scrollbar {
+    display: none;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  /* Hide default cursor when custom cursor is active */
+  .custom-cursor, 
+  .custom-cursor * {
+    cursor: none !important;
+  }
+  
+  /* Smooth scrolling for the whole page */
+  html {
+    scroll-behavior: smooth;
+    @apply overflow-x-hidden;
+  }
+  
+  /* Better focus styles */
+  :focus {
+    @apply outline-none ring-2 ring-orange-500/50;
+  }
+  
+  /* Image hover effect */
+  .img-hover {
+    @apply overflow-hidden;
+  }
+  
+  .img-hover img {
+    @apply transition-all duration-700 ease-in-out hover:scale-110;
+  }
+  
+  /* Magnetic elements */
+  [data-magnetic] {
+    @apply cursor-none;
+  }
+}
+
+/* Craftsman design system colors */
+:root {
+  /* Wood and natural tones */
+  --color-wood-light: #d7bc91;
+  --color-wood-medium: #b48a66;
+  --color-wood-dark: #8b5e34;
+  --color-wood-deep: #5e4b3c;
+
+  /* Metal tones */
+  --color-metal-light: #e2e2e2;
+  --color-metal-medium: #a7a7a7;
+  --color-metal-dark: #6e6e6e;
+
+  /* Accent colors */
+  --color-red-accent: #c6302c;
+  --color-brass: #9b7a52;
+  
+  /* Text colors */
+  --color-text-dark: #111111;
+  --color-text-light: #ffffff;
+}
+
+/* Craftsman-specific classes */
+.wood-texture {
+  background-color: var(--color-wood-dark);
+  background-image: url('https://images.unsplash.com/photo-1533135091724-62cc5402aa20?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
+  background-blend-mode: multiply;
+  background-size: cover;
+}
+
+.metal-texture {
+  background-color: var(--color-metal-medium);
+  background-image: radial-gradient(circle, #ffffff 0%, rgba(255,255,255,0) 75%);
+  background-blend-mode: overlay;
+  background-size: 5px 5px;
+}
+
+/* Parallax effect */
+.parallax-wrapper {
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  perspective: 8px;
+}
+
+.parallax-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.parallax-back {
+  transform: translateZ(0px) scale(1);
+}
+
+.parallax-mid {
+  transform: translateZ(2px) scale(0.75);
+}
+
+.parallax-front {
+  transform: translateZ(4px) scale(0.5);
+}
+
+/* Border Utilities */
+.border-1 {
+  border-width: 1px;
+}
+
+.border-2 {
+  border-width: 2px;
+}
+
+.border-red-accent {
+  border-color: var(--color-red-accent);
+}
+
+/* Text styling */
+.uppercase-wide {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 500;
+}
+
+/* Transition effects */
+.hover-lift {
+  transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Button styles */
+.btn-craftsman {
+  background-color: white;
+  color: var(--color-text-dark);
+  border: 2px solid black;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  padding: 0.5rem 1.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-craftsman:hover {
+  background-color: black;
+  color: white;
+}
+
+/* Animation utilities */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Advanced animations */
+@keyframes reveal {
+  0% {
+    clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
+  }
+  100% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+.reveal-animation {
+  animation: reveal 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}
+
+@keyframes fadeScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.fade-scale {
+  animation: fadeScale 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Text reveal animation */
+.text-reveal-wrapper {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.text-reveal {
+  transform: translateY(100%);
+  transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.text-reveal.show {
+  transform: translateY(0);
+}
+
+/* Parallax mouse move effect */
+.parallax-mouse {
+  transition: transform 0.2s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+/* Stagger animations */
+.stagger > * {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.stagger.in-view > *:nth-child(1) { transition-delay: 0.1s; }
+.stagger.in-view > *:nth-child(2) { transition-delay: 0.2s; }
+.stagger.in-view > *:nth-child(3) { transition-delay: 0.3s; }
+.stagger.in-view > *:nth-child(4) { transition-delay: 0.4s; }
+.stagger.in-view > *:nth-child(5) { transition-delay: 0.5s; }
+.stagger.in-view > *:nth-child(6) { transition-delay: 0.6s; }
+
+.stagger.in-view > * {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+/* Glow effect */
+.glow-on-hover {
+  transition: box-shadow 0.3s ease;
+}
+
+.glow-on-hover:hover {
+  box-shadow: 0 0 20px rgba(255, 107, 0, 0.5);
+}
+
+/* 3D hover effect */
+.hover-3d {
+  transition: transform 0.3s ease;
+  transform-style: preserve-3d;
+}
+
+.hover-3d:hover {
+  transform: perspective(1000px) rotateX(5deg) rotateY(5deg);
+}
+
+/* Custom cursor styles */
+.custom-cursor-text {
+  position: relative;
+}
+
+.custom-cursor-text:after {
+  content: "View";
+  position: absolute;
+  opacity: 0;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  background: #ff6b00;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.custom-cursor-text:hover:after {
+  opacity: 1;
+}
