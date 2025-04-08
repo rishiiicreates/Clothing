@@ -75,7 +75,8 @@ const CustomCursor = () => {
       }
       
       if (tagName === 'button' || element.closest('button') || 
-          element.classList.contains('btn') || element.closest('.btn')) {
+          element.classList.contains('btn') || element.closest('.btn') ||
+          isMagnetizable(element)) {
         setCursorVariant('button');
         setTextContent('Click');
         return;
@@ -119,12 +120,20 @@ const CustomCursor = () => {
         
       if (isNearElement) {
         // Set magnetic effect properties
-        setMagneticProps({
-          isActive: true,
-          x: distanceX * 0.3, // Scale down the effect
-          y: distanceY * 0.3
-        });
-      } else {
+        const newX = distanceX * 0.25;
+        const newY = distanceY * 0.25;
+        
+        // Only update if the change is significant to avoid unnecessary re-renders
+        if (Math.abs(newX - magneticProps.x) > 1 || 
+            Math.abs(newY - magneticProps.y) > 1 || 
+            !magneticProps.isActive) {
+          setMagneticProps({
+            isActive: true,
+            x: newX,
+            y: newY
+          });
+        }
+      } else if (magneticProps.isActive) {
         setMagneticProps({ isActive: false, x: 0, y: 0 });
       }
     };
@@ -167,7 +176,7 @@ const CustomCursor = () => {
       document.removeEventListener('mouseenter', handleMouseEnter);
       document.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, []);
+  }, [magneticProps.isActive, magneticProps.x, magneticProps.y]);
 
   useEffect(() => {
     // Sync cursor animations with changes in state

@@ -20,7 +20,7 @@ export const MagneticButton = ({
   strength = 30,
   radius = 400,
   as = 'button',
-  onClick,
+  onClick = () => {}, // Provide a default empty function for onClick
   href,
   disabled = false,
   variant = 'default',
@@ -106,7 +106,7 @@ export const MagneticButton = ({
         href={as === 'a' ? href : undefined}
         onClick={disabled ? undefined : onClick}
         disabled={as === 'button' ? disabled : undefined}
-        className={`relative ${getButtonStyles()} ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-none'} 
+        className={`relative ${getButtonStyles()} ${disabled ? 'opacity-50 cursor-not-allowed' : ''} 
           transition-shadow duration-200 px-6 py-3 rounded-full font-medium ${className}`}
         animate={{
           x: disabled ? 0 : position.x,

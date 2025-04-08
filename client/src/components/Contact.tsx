@@ -153,7 +153,7 @@ const Contact = () => {
               <button 
                 type="submit" 
                 className="relative inline-block px-8 py-3 overflow-hidden group" 
-                data-hover="true"
+                data-magnetic
               >
                 <span className="relative z-10 font-hand text-xl text-white group-hover:text-white transition-colors">
                   Send Message
@@ -196,7 +196,7 @@ const Contact = () => {
                   <button 
                     type="submit" 
                     className="relative overflow-hidden px-6 py-3 bg-[#FF5C99] rounded-lg font-hand text-white hover:bg-[#FF2F7A] transition" 
-                    data-hover="true"
+                    data-magnetic
                   >
                     Subscribe
                   </button>
