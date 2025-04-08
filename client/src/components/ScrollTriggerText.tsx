@@ -105,11 +105,11 @@ const ScrollTriggerText: React.FC<TextProps> = ({
   // Enhanced word animation with more refined movement
   const wordVariants = {
     hidden: {
-      y: 105,
+      y: 50, // Reduced distance for smoother motion
       opacity: 0,
-      rotateX: -15,
+      rotateX: -5, // Reduced rotation for less jittery effect
       filter: "blur(3px)",
-      scale: 0.95,
+      scale: 0.98, // Closer to 1 for subtler effect
     },
     visible: (i: number) => ({
       y: 0,
@@ -119,14 +119,13 @@ const ScrollTriggerText: React.FC<TextProps> = ({
       scale: 1,
       transition: {
         // Modified spring physics for more natural word motion
-        type: "spring",
-        damping: 22,
-        stiffness: 90,
-        mass: 0.6,
+        type: "tween", // Changed to tween for smoother motion
+        duration: duration * 0.8,
+        ease: eases.silk,
         delay: delay + i * staggerChildren,
         // Independent property transitions for more control
         opacity: { 
-          duration: duration * 0.7, 
+          duration: duration * 0.6, 
           ease: eases.silk 
         },
         filter: { 
@@ -134,8 +133,8 @@ const ScrollTriggerText: React.FC<TextProps> = ({
           ease: "linear" 
         },
         scale: {
-          duration: duration * 1.1,
-          ease: eases.polished
+          duration: duration * 0.9,
+          ease: eases.silk
         }
       },
     }),
@@ -144,11 +143,11 @@ const ScrollTriggerText: React.FC<TextProps> = ({
   // Enhanced character animation with microinteractions
   const charVariants = {
     hidden: {
-      y: 40,
+      y: 20, // Reduced for smoother motion
       opacity: 0,
-      rotateX: -25,
+      rotateX: -10, // Reduced for less jittery effect
       filter: "blur(2px)",
-      scale: 0.85,
+      scale: 0.95, // Closer to 1 for subtler effect
     },
     visible: (i: number) => ({
       y: 0,
@@ -157,26 +156,24 @@ const ScrollTriggerText: React.FC<TextProps> = ({
       filter: "blur(0px)",
       scale: 1,
       transition: {
-        // More refined spring physics for characters
-        type: "spring",
-        stiffness: 420,
-        damping: 32,
-        mass: 0.8,
+        // More refined tween animation for smoother characters
+        type: "tween",
+        duration: duration * 0.6,
+        ease: eases.silk,
         delay: delay + i * staggerChildren,
         // Property-specific transitions
         opacity: { 
-          duration: duration * 0.5, 
+          duration: duration * 0.4, 
           ease: eases.silk,
           delay: delay + (i * staggerChildren * 0.9) // Slightly quicker opacity transition
         },
         filter: { 
-          duration: duration * 0.4, 
+          duration: duration * 0.3, 
           ease: "linear" 
         },
         scale: {
-          type: "spring",
-          stiffness: 500,
-          damping: 25,
+          duration: duration * 0.7,
+          ease: eases.silk,
           delay: delay + (i * staggerChildren)
         }
       },
@@ -229,10 +226,10 @@ const ScrollTriggerText: React.FC<TextProps> = ({
   const slideUpVariants = {
     hidden: { 
       opacity: 0, 
-      y: 35, 
-      scale: 0.97,
-      filter: "blur(5px)",
-      rotateX: -4, // Slight 3D perspective tilt
+      y: 25, // Reduced for smoother motion
+      scale: 0.98, // Closer to 1 for subtler effect
+      filter: "blur(3px)", // Reduced blur amount
+      rotateX: 0, // Removed rotation for less jittery effect
     },
     visible: {
       opacity: 1,
@@ -242,31 +239,28 @@ const ScrollTriggerText: React.FC<TextProps> = ({
       rotateX: 0,
       transition: {
         // Overall timing
+        type: "tween", // Changed to tween for consistent, smooth motion
+        duration: duration * 0.7,
+        ease: eases.silk,
         delay,
         
         // Property-specific transitions
         opacity: { 
-          duration: duration * 0.7, 
+          duration: duration * 0.5, 
           ease: eases.silk,
-          delay: delay + (duration * 0.1) // Slightly delayed for better sequencing
+          delay: delay + (duration * 0.05) // Slightly delayed for better sequencing
         },
         y: { 
-          type: "spring", 
-          stiffness: 210, // Lower stiffness for smoother motion
-          damping: 26,
-          mass: 0.75 // Lighter mass
+          duration: duration * 0.7,
+          ease: eases.premium
         },
         scale: { 
-          duration: duration * 1.25, 
-          ease: eases.polished 
+          duration: duration * 0.7, 
+          ease: eases.silk 
         },
         filter: { 
-          duration: duration * 0.5, 
+          duration: duration * 0.4, 
           ease: "linear" 
-        },
-        rotateX: {
-          duration: duration * 1.3,
-          ease: eases.textReveal
         }
       },
     },
@@ -276,10 +270,10 @@ const ScrollTriggerText: React.FC<TextProps> = ({
   const slideDownVariants = {
     hidden: { 
       opacity: 0, 
-      y: -35, 
-      scale: 0.97,
-      filter: "blur(5px)",
-      rotateX: 4, // Opposite tilt direction from slide-up
+      y: -25, // Reduced for smoother motion
+      scale: 0.98, // Closer to 1 for subtler effect
+      filter: "blur(3px)", // Reduced blur amount
+      rotateX: 0, // Removed rotation for less jittery effect
     },
     visible: {
       opacity: 1,
@@ -289,31 +283,28 @@ const ScrollTriggerText: React.FC<TextProps> = ({
       rotateX: 0,
       transition: {
         // Overall timing
+        type: "tween", // Changed to tween for consistent, smooth motion
+        duration: duration * 0.7,
+        ease: eases.silk,
         delay,
         
         // Property-specific transitions
         opacity: { 
-          duration: duration * 0.7, 
+          duration: duration * 0.5, 
           ease: eases.silk,
-          delay: delay + (duration * 0.1) // Slightly delayed for better sequencing
+          delay: delay + (duration * 0.05) // Slightly delayed for better sequencing
         },
         y: { 
-          type: "spring", 
-          stiffness: 210, // Lower stiffness for smoother motion
-          damping: 26,
-          mass: 0.75 // Lighter mass
+          duration: duration * 0.7,
+          ease: eases.premium
         },
         scale: { 
-          duration: duration * 1.25, 
-          ease: eases.polished 
+          duration: duration * 0.7, 
+          ease: eases.silk 
         },
         filter: { 
-          duration: duration * 0.5, 
+          duration: duration * 0.4, 
           ease: "linear" 
-        },
-        rotateX: {
-          duration: duration * 1.3,
-          ease: eases.textReveal
         }
       },
     },

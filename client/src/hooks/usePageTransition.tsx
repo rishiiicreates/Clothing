@@ -69,10 +69,10 @@ export const PageTransition = ({
   location,
   transitionType = 'fade',
   duration = 0.5,
-  bgColor = 'rgba(0,0,0,0.5)',
+  bgColor = 'rgba(0,0,0,0.05)',
   overlay = false,
-  overlayColor = 'rgba(0, 0, 0, 0.5)',
-  overlayOpacity = 0.7
+  overlayColor = 'rgba(0, 0, 0, 0.1)',
+  overlayOpacity = 0.3
 }: PageTransitionProps) => {
   // Enhanced variants with more sophisticated animations
   const variants = {

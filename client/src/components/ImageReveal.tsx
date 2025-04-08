@@ -39,17 +39,17 @@ const ImageReveal: React.FC<ImageRevealProps> = ({
   
   // Enhanced spring-based animation for professional parallax effects
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 85, // Softer spring for smoother motion
-    damping: 35,   // Increased damping for more controlled movement
-    restDelta: 0.0005, // Higher precision for smoother transitions
-    mass: 0.8      // Slightly heavier mass for more natural momentum
+    stiffness: 65, // Reduced stiffness for smoother motion
+    damping: 42,   // Increased damping for more controlled movement
+    restDelta: 0.0001, // Higher precision for smoother transitions
+    mass: 1.2      // Heavier mass for more natural momentum and less jitter
   });
   
-  // Multi-step transforms for more nuanced parallax effects
+  // Multi-step transforms for more nuanced parallax effects - reduced scale values for smoother effect
   const imageScale = useTransform(
     smoothProgress, 
     [0, 0.25, 0.5, 0.75, 1], 
-    [1, 1.02, 1.05, 1.08, 1.1]
+    [1, 1.01, 1.02, 1.03, 1.04] // Smaller scale changes for more subtle, professional effect
   );
   
   // More gradual opacity transitions
@@ -203,9 +203,9 @@ const ImageReveal: React.FC<ImageRevealProps> = ({
             y: 0,
             scale: 1.02, // Slight scale up for more depth
             transition: {
-              type: "spring",
-              stiffness: 65,
-              damping: 22,
+              type: "tween", // Changed to tween for smoother movement
+              duration: duration * 1.2,
+              ease: eases.refined,
               delay: delay + 0.08
             }
           } : getInitialPosition()}
