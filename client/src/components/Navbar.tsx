@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Menu, ShoppingBag, X, User, Heart } from 'lucide-react';
+import { useSmoothScroll } from '../hooks/useSmoothScroll';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [cartCount, setCartCount] = useState(2);
+  const { handleAnchorClick } = useSmoothScroll();
 
   return (
     <>
@@ -53,10 +55,37 @@ const Navbar = () => {
             <div className="flex items-center space-x-5">
               {/* Desktop Navigation Links */}
               <div className="hidden md:flex space-x-6">
-                <a href="#" className="text-sm font-medium hover:text-orange-500 transition-colors">Home</a>
-                <a href="#collection" className="text-sm font-medium hover:text-orange-500 transition-colors">Collection</a>
-                <a href="#" className="text-sm font-medium hover:text-orange-500 transition-colors">About</a>
-                <a href="#" className="text-sm font-medium hover:text-orange-500 transition-colors">Contact</a>
+                <a 
+                  href="#" 
+                  className="text-sm font-medium hover:text-orange-500 transition-colors"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                >
+                  Home
+                </a>
+                <a 
+                  href="#collection" 
+                  className="text-sm font-medium hover:text-orange-500 transition-colors"
+                  onClick={(e) => handleAnchorClick(e, { offset: 80, duration: 800 })}
+                >
+                  Collection
+                </a>
+                <a 
+                  href="#about" 
+                  className="text-sm font-medium hover:text-orange-500 transition-colors"
+                  onClick={(e) => handleAnchorClick(e, { offset: 80, duration: 800 })}
+                >
+                  About
+                </a>
+                <a 
+                  href="#contact" 
+                  className="text-sm font-medium hover:text-orange-500 transition-colors"
+                  onClick={(e) => handleAnchorClick(e, { offset: 80, duration: 800 })}
+                >
+                  Contact
+                </a>
               </div>
               
               <div className="flex items-center space-x-4">
@@ -135,12 +164,61 @@ const Navbar = () => {
                 </div>
                 
                 <div className="py-4">
-                  <a href="#" className="block px-4 py-3 hover:bg-gray-100" onClick={() => setIsMobileMenuOpen(false)}>Home</a>
-                  <a href="#" className="block px-4 py-3 hover:bg-gray-100" onClick={() => setIsMobileMenuOpen(false)}>Collection</a>
-                  <a href="#" className="block px-4 py-3 hover:bg-gray-100" onClick={() => setIsMobileMenuOpen(false)}>About</a>
-                  <a href="#" className="block px-4 py-3 hover:bg-gray-100" onClick={() => setIsMobileMenuOpen(false)}>Contact</a>
-                  <a href="#" className="block px-4 py-3 hover:bg-gray-100" onClick={() => setIsMobileMenuOpen(false)}>Account</a>
-                  <a href="#" className="block px-4 py-3 hover:bg-gray-100" onClick={() => setIsMobileMenuOpen(false)}>Wishlist</a>
+                  <a 
+                    href="#" 
+                    className="block px-4 py-3 hover:bg-gray-100" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setIsMobileMenuOpen(false);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                  >
+                    Home
+                  </a>
+                  <a 
+                    href="#collection" 
+                    className="block px-4 py-3 hover:bg-gray-100" 
+                    onClick={(e) => {
+                      handleAnchorClick(e, { offset: 80, duration: 800 });
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    Collection
+                  </a>
+                  <a 
+                    href="#about" 
+                    className="block px-4 py-3 hover:bg-gray-100" 
+                    onClick={(e) => {
+                      handleAnchorClick(e, { offset: 80, duration: 800 });
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    About
+                  </a>
+                  <a 
+                    href="#contact" 
+                    className="block px-4 py-3 hover:bg-gray-100" 
+                    onClick={(e) => {
+                      handleAnchorClick(e, { offset: 80, duration: 800 });
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    Contact
+                  </a>
+                  <a 
+                    href="#" 
+                    className="block px-4 py-3 hover:bg-gray-100" 
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Account
+                  </a>
+                  <a 
+                    href="#" 
+                    className="block px-4 py-3 hover:bg-gray-100" 
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Wishlist
+                  </a>
                 </div>
               </motion.div>
             </motion.div>

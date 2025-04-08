@@ -40,7 +40,14 @@ function Router() {
       
       if (anchor && anchor.getAttribute('href')?.startsWith('#')) {
         e.preventDefault();
-        handleAnchorClick(e as unknown as React.MouseEvent<HTMLAnchorElement>, {
+        
+        // Create a proper React event from the DOM event
+        const reactEvent = {
+          currentTarget: anchor,
+          preventDefault: () => {},
+        } as React.MouseEvent<HTMLAnchorElement>;
+        
+        handleAnchorClick(reactEvent, {
           offset: 80, // Account for sticky header
           duration: 800,
           easing: (t) => 1 - Math.pow(1 - t, 4) // Ease out quartic
