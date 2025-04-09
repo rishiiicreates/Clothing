@@ -7,7 +7,7 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import CustomCursor from "./components/CustomCursor";
 import { useTheme } from "./context/ThemeContext";
-import usePageTransition, { TransitionType } from "./hooks/usePageTransition";
+import usePageTransition from "./hooks/usePageTransition";
 import { useSmoothScroll } from "./hooks/useSmoothScroll";
 
 function Router() {
@@ -15,22 +15,19 @@ function Router() {
   const { handleAnchorClick } = useSmoothScroll();
   const [isHome] = useRoute("/");
   
-  // Use our enhanced page transitions
+  // Use simplified page transitions
   const { 
     PageTransition, 
     transitionType, 
+    setTransitionType,
     transitionDuration,
-    selectRandomParallaxTransition,
-    setOverlay
-  } = usePageTransition('parallax-up', 0.7);
+  } = usePageTransition('fade', 0.4);
   
   // Change transition effect on route change
   useEffect(() => {
-    // Select a random parallax effect
-    selectRandomParallaxTransition();
-    // Enable overlay for transitions between pages
-    setOverlay(true);
-  }, [location, selectRandomParallaxTransition, setOverlay]);
+    // Alternate between fade and slide transitions
+    setTransitionType(location === '/' ? 'fade' : 'slide');
+  }, [location, setTransitionType]);
   
   // Handle smooth scrolling for all anchor links
   useEffect(() => {
@@ -64,9 +61,6 @@ function Router() {
       location={location} 
       transitionType={transitionType} 
       duration={transitionDuration}
-      overlay={true}
-      overlayColor="rgba(0, 0, 0, 0.6)"
-      overlayOpacity={0.6}
     >
       <Switch>
         <Route path="/" component={Home} />

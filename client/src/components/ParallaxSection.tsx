@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 
 interface ParallaxLayerProps {
   children: React.ReactNode;
@@ -10,7 +10,7 @@ interface ParallaxLayerProps {
 
 export const ParallaxLayer = ({ 
   children, 
-  speed = 0.2, 
+  speed = 0.05, // Reduced speed for subtler effect
   className = '',
   direction = 'up' 
 }: ParallaxLayerProps) => {
@@ -20,20 +20,32 @@ export const ParallaxLayer = ({
     offset: ["start end", "end start"]
   });
   
+  // Convert scroll progress to smooth spring motion
+  const smoothScrollProgress = useSpring(scrollYProgress, {
+    stiffness: 50,
+    damping: 30,
+    mass: 1
+  });
+  
+  // Calculate transform with reduced values
   let transform;
+  const factor = speed * 50; // Reduced multiplier for subtler movement
+  
   switch (direction) {
     case 'up':
-      transform = useTransform(scrollYProgress, [0, 1], ['0%', `${-speed * 100}%`]);
+      transform = useTransform(smoothScrollProgress, [0, 1], ['0%', `${-factor}%`]);
       break;
     case 'down':
-      transform = useTransform(scrollYProgress, [0, 1], ['0%', `${speed * 100}%`]);
+      transform = useTransform(smoothScrollProgress, [0, 1], ['0%', `${factor}%`]);
       break;
     case 'left':
-      transform = useTransform(scrollYProgress, [0, 1], ['0%', `${-speed * 100}%`]);
+      transform = useTransform(smoothScrollProgress, [0, 1], ['0%', `${-factor}%`]);
       break;
     case 'right':
-      transform = useTransform(scrollYProgress, [0, 1], ['0%', `${speed * 100}%`]);
+      transform = useTransform(smoothScrollProgress, [0, 1], ['0%', `${factor}%`]);
       break;
+    default:
+      transform = useTransform(smoothScrollProgress, [0, 1], ['0%', `${-factor}%`]);
   }
   
   const translateProperty = direction === 'up' || direction === 'down' ? 'translateY' : 'translateX';
@@ -54,7 +66,6 @@ interface ParallaxImageProps {
   alt: string;
   speed?: number;
   className?: string;
-  priority?: boolean;
   overlay?: boolean;
   overlayColor?: string;
   overlayOpacity?: number;
@@ -63,11 +74,11 @@ interface ParallaxImageProps {
 export const ParallaxImage = ({
   src,
   alt,
-  speed = 0.2,
+  speed = 0.07, // Reduced speed for subtler movement
   className = '',
   overlay = false,
-  overlayColor = 'black',
-  overlayOpacity = 0.4
+  overlayColor = 'rgba(0,0,0,0.6)', // RGBA for better transparency
+  overlayOpacity = 0.2 // Reduced opacity
 }: ParallaxImageProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -75,18 +86,25 @@ export const ParallaxImage = ({
     offset: ["start end", "end start"]
   });
   
-  // Transform more extreme when viewport is wider (desktop)
-  const [transformAmount, setTransformAmount] = useState('15%');
+  // Smooth spring animation for scroll
+  const smoothScrollProgress = useSpring(scrollYProgress, {
+    stiffness: 30, // Lower stiffness for smoother motion
+    damping: 30,
+    mass: 1.5 // Heavier mass for more inertia
+  });
+  
+  // Reduced transform values for subtler effect
+  const [transformAmount, setTransformAmount] = useState('8%');
   
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
       if (width > 1280) {
-        setTransformAmount('20%');
+        setTransformAmount('8%');
       } else if (width > 768) {
-        setTransformAmount('15%');
+        setTransformAmount('6%');
       } else {
-        setTransformAmount('10%');
+        setTransformAmount('4%');
       }
     };
     
@@ -96,7 +114,7 @@ export const ParallaxImage = ({
   }, []);
   
   const y = useTransform(
-    scrollYProgress, 
+    smoothScrollProgress, 
     [0, 1], 
     [`${-parseFloat(transformAmount) * speed}`, `${parseFloat(transformAmount) * speed}`]
   );
@@ -107,7 +125,13 @@ export const ParallaxImage = ({
       className={`overflow-hidden relative ${className}`}
     >
       <motion.div 
-        style={{ y, height: `calc(100% + ${transformAmount})`, width: '100%', position: 'absolute', top: `-${parseFloat(transformAmount) / 2}%` }}
+        style={{ 
+          y,
+          height: `calc(100% + ${transformAmount})`, 
+          width: '100%', 
+          position: 'absolute', 
+          top: `-${parseFloat(transformAmount) / 2}%` 
+        }}
         className="will-change-transform"
       >
         <img 
@@ -130,6 +154,61 @@ export const ParallaxImage = ({
   );
 };
 
+// New hover effect component for page transitions
+export const HoverParallax = ({ 
+  children, 
+  className = '' 
+}: { 
+  children: React.ReactNode, 
+  className?: string 
+}) => {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!ref.current) return;
+      
+      const rect = ref.current.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      
+      // Calculate distance from center (0 to 1)
+      const distanceX = (e.clientX - centerX) / (rect.width / 2);
+      const distanceY = (e.clientY - centerY) / (rect.height / 2);
+      
+      // Apply smaller effect multiplier
+      setPosition({ 
+        x: distanceX * 5, 
+        y: distanceY * 5 
+      });
+    };
+    
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  return (
+    <motion.div
+      ref={ref}
+      className={`${className}`}
+      animate={{
+        x: position.x,
+        y: position.y,
+        rotateX: -position.y * 0.5, // Subtle 3D effect
+        rotateY: position.x * 0.5,  // Subtle 3D effect
+      }}
+      transition={{
+        type: "tween",
+        ease: [0.17, 0.67, 0.83, 0.67], // Smooth ease
+        duration: 0.5 // Slow enough for smooth response
+      }}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
 interface ParallaxSectionProps {
   children: React.ReactNode;
   className?: string;
@@ -143,9 +222,9 @@ export const ParallaxSection = ({
   children,
   className = '',
   bgImage,
-  overlayColor = 'black',
-  overlayOpacity = 0.4,
-  bgImageSpeed = 0.2
+  overlayColor = 'rgba(0,0,0,0.8)', // RGBA format
+  overlayOpacity = 0.2, // Reduced opacity
+  bgImageSpeed = 0.07 // Reduced speed
 }: ParallaxSectionProps) => {
   return (
     <section className={`relative overflow-hidden ${className}`}>

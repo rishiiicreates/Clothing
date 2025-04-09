@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, useAnimation, AnimatePresence } from 'framer-motion';
+import { motion, useAnimation } from 'framer-motion';
 
 interface MagneticProps {
   isActive: boolean;
@@ -22,51 +22,42 @@ const CustomCursor = () => {
   const cursorControls = useAnimation();
   const ringControls = useAnimation();
   
-  // Cursor variants for different states
+  // Simplified cursor variants with smaller sizes
   const cursorVariants = {
     default: {
-      height: 16,
-      width: 16,
+      height: 12,
+      width: 12,
       backgroundColor: "#ffffff",
       mixBlendMode: "difference" as "difference"
     },
-    text: {
-      height: 80,
-      width: 80,
-      backgroundColor: "#ff6b00",
-      mixBlendMode: "normal" as "normal"
-    },
     link: {
-      height: 60,
-      width: 60,
+      height: 40,
+      width: 40,
       backgroundColor: "rgba(255, 255, 255, 0.2)",
-      border: "1px solid #ffffff",
       mixBlendMode: "difference" as "difference"
     },
     button: {
-      height: 60,
-      width: 60,
+      height: 40,
+      width: 40,
       backgroundColor: "#ff6b00",
       mixBlendMode: "normal" as "normal"
     },
     image: {
-      height: 120,
-      width: 120,
-      backgroundColor: "rgba(255, 107, 0, 0.2)",
+      height: 60,
+      width: 60,
+      backgroundColor: "rgba(255, 107, 0, 0.15)",
       mixBlendMode: "normal" as "normal"
     }
   };
 
   useEffect(() => {
-    // Helper function to check if an element is magnetizable
+    // Helper function to check if element is interactive
     const isMagnetizable = (element: HTMLElement): boolean => {
       if (!element) return false;
       
       return element.hasAttribute('data-magnetic') || 
-             element.hasAttribute('data-hover') ||
              element.classList.contains('magnetic-button') ||
              element.closest('[data-magnetic]') !== null ||
-             element.closest('[data-hover]') !== null ||
              element.closest('.magnetic-button') !== null;
     };
     
@@ -78,22 +69,14 @@ const CustomCursor = () => {
       const elementOrParent = (selector: string) => 
         element.matches(selector) || !!element.closest(selector);
       
-      // Check for large interactive elements
-      if (elementOrParent('.magnetic-large')) {
-        setCursorVariant('image');
-        setTextContent('View');
-        return;
-      }
-      
-      // Check for buttons and magnetic elements
+      // Check for buttons
       if (tagName === 'button' ||
           elementOrParent('button') || 
           elementOrParent('.btn') ||
           elementOrParent('[type="submit"]') ||
-          elementOrParent('[type="button"]') ||
-          isMagnetizable(element)) {
+          elementOrParent('[type="button"]')) {
         setCursorVariant('button');
-        setTextContent('Click');
+        setTextContent('');
         return;
       }
       
@@ -106,14 +89,12 @@ const CustomCursor = () => {
         return;
       }
       
-      // Check for images and media
+      // Check for images
       if (tagName === 'img' || 
           elementOrParent('img') || 
-          elementOrParent('.img-hover') ||
-          elementOrParent('video') ||
-          element.dataset.cursorType === 'image') {
+          elementOrParent('video')) {
         setCursorVariant('image');
-        setTextContent('View');
+        setTextContent('');
         return;
       }
       
@@ -122,7 +103,7 @@ const CustomCursor = () => {
       setTextContent('');
     };
     
-    // Handle magnetic effect calculations with performance optimizations
+    // Simplified magnetic effect
     const handleMagneticEffect = (e: MouseEvent, element: HTMLElement) => {
       if (!element) return;
       
@@ -134,46 +115,26 @@ const CustomCursor = () => {
       const distanceX = e.clientX - centerX;
       const distanceY = e.clientY - centerY;
       
-      // Adaptive sensitivity based on element size 
-      const elementSize = Math.min(rect.width, rect.height);
-      const magnetStrength = elementSize < 50 ? 0.3 : 0.25; // Stronger effect for smaller elements
+      // Reduced strength for subtler effect
+      const magnetStrength = 0.15;
       
-      // Only apply effect if cursor is near the element
-      const proximityThreshold = Math.max(rect.width, rect.height) * 0.5;
-      const distance = Math.sqrt(distanceX**2 + distanceY**2);
-      const isNearElement = distance < proximityThreshold;
-        
-      if (isNearElement) {
-        // Calculate magnetic pull with adaptive strength
-        const pullFactor = 1 - Math.min(1, distance / proximityThreshold);
-        const newX = distanceX * magnetStrength * pullFactor;
-        const newY = distanceY * magnetStrength * pullFactor;
-        
-        // Threshold for updates to reduce rerenders (1px change minimum)
-        const shouldUpdate = 
-          Math.abs(newX - magneticProps.x) > 1 || 
-          Math.abs(newY - magneticProps.y) > 1 || 
-          magneticProps.isActive === false;
-          
-        if (shouldUpdate) {
-          setMagneticProps({
-            isActive: true,
-            x: newX,
-            y: newY
-          });
-        }
-      } else if (magneticProps.isActive) {
-        // Reset when cursor moves away
-        setMagneticProps({ isActive: false, x: 0, y: 0 });
-      }
+      // Calculate magnetic pull with reduced strength
+      const newX = distanceX * magnetStrength;
+      const newY = distanceY * magnetStrength;
+      
+      setMagneticProps({
+        isActive: true,
+        x: newX,
+        y: newY
+      });
     };
     
-    // Throttled position update for performance
+    // Debounced position update for smoother movement
     let lastUpdateTime = 0;
     const updatePosition = (e: MouseEvent) => {
-      // Throttle updates to every 10ms for performance
+      // Throttle updates for performance
       const now = Date.now();
-      if (now - lastUpdateTime < 10) return;
+      if (now - lastUpdateTime < 16) return; // ~60fps
       lastUpdateTime = now;
       
       // Basic cursor position
@@ -185,9 +146,9 @@ const CustomCursor = () => {
       
       // Check for magnetic elements
       if (isMagnetizable(target)) {
-        const magneticElement = target.hasAttribute('data-magnetic') || target.hasAttribute('data-hover')
+        const magneticElement = target.hasAttribute('data-magnetic')
           ? target 
-          : (target.closest('[data-magnetic]') || target.closest('[data-hover]') || target.closest('.magnetic-button')) as HTMLElement;
+          : (target.closest('[data-magnetic]') || target.closest('.magnetic-button')) as HTMLElement;
           
         handleMagneticEffect(e, magneticElement);
       } else if (magneticProps.isActive) {
@@ -225,7 +186,6 @@ const CustomCursor = () => {
       const halfSize = size / 2;
       
       return {
-        size,
         halfSize,
         bgColor: dims.backgroundColor,
         blendMode: dims.mixBlendMode
@@ -234,10 +194,10 @@ const CustomCursor = () => {
     
     const { halfSize, bgColor, blendMode } = getDimensions();
     
-    // Enhanced cursor animation with more fluid transitions
+    // Smoother cursor animation
     cursorControls.start({
       opacity: isVisible ? 1 : 0,
-      scale: isClicking ? 0.8 : 1,
+      scale: isClicking ? 0.9 : 1,
       x: position.x - halfSize + (magneticProps.isActive ? magneticProps.x : 0),
       y: position.y - halfSize + (magneticProps.isActive ? magneticProps.y : 0),
       height: cursorVariants[cursorVariant as keyof typeof cursorVariants].height,
@@ -245,30 +205,26 @@ const CustomCursor = () => {
       backgroundColor: bgColor,
       mixBlendMode: blendMode,
       transition: {
-        // Use different types of animation for different properties
-        x: { type: "spring", damping: 28, stiffness: 300, mass: 0.1 },
-        y: { type: "spring", damping: 28, stiffness: 300, mass: 0.1 },
-        scale: { type: "spring", damping: 25, stiffness: 300, mass: 0.5 },
-        backgroundColor: { type: "tween", duration: 0.2 },
-        height: { type: "spring", damping: 20, stiffness: 200 },
-        width: { type: "spring", damping: 20, stiffness: 200 },
-        opacity: { duration: 0.15 }
+        // Smoother transitions with tweened motion
+        x: { type: "tween", duration: 0.1 },
+        y: { type: "tween", duration: 0.1 },
+        scale: { type: "tween", duration: 0.15 },
+        opacity: { duration: 0.2 }
       }
     });
     
-    // Outer ring follows with more delay for trailing effect
-    const ringSize = cursorVariant === 'default' ? 44 : 100;
+    // Simpler ring effect
+    const ringSize = cursorVariant === 'default' ? 30 : 60;
     
     ringControls.start({
-      opacity: isVisible ? (isClicking ? 0.3 : 0.4) : 0,
-      scale: isClicking ? 0.85 : 1.1,
-      x: position.x - ringSize/2 + (magneticProps.isActive ? magneticProps.x * 0.7 : 0),
-      y: position.y - ringSize/2 + (magneticProps.isActive ? magneticProps.y * 0.7 : 0),
+      opacity: isVisible ? (isClicking ? 0.2 : 0.3) : 0,
+      scale: isClicking ? 0.9 : 1,
+      x: position.x - ringSize/2 + (magneticProps.isActive ? magneticProps.x * 0.5 : 0),
+      y: position.y - ringSize/2 + (magneticProps.isActive ? magneticProps.y * 0.5 : 0),
       transition: {
-        x: { type: "spring", damping: 12, stiffness: 150, mass: 0.3 },
-        y: { type: "spring", damping: 12, stiffness: 150, mass: 0.3 },
-        scale: { type: "spring", damping: 15, stiffness: 150, mass: 0.35 },
-        opacity: { duration: 0.25 }
+        x: { type: "tween", duration: 0.15 },
+        y: { type: "tween", duration: 0.15 },
+        opacity: { duration: 0.3 }
       }
     });
   }, [position, isVisible, isClicking, cursorVariant, magneticProps, cursorControls, ringControls]);
@@ -277,24 +233,17 @@ const CustomCursor = () => {
     <>
       {/* Main cursor */}
       <motion.div
-        className="fixed pointer-events-none z-[9999] rounded-full flex items-center justify-center"
+        className="fixed pointer-events-none z-[9999] rounded-full"
         animate={cursorControls}
         initial={{ opacity: 0 }}
-      >
-        {/* Text content for certain cursor states */}
-        {textContent && cursorVariant !== 'default' && (
-          <span className="text-white text-xs font-medium select-none">
-            {textContent}
-          </span>
-        )}
-      </motion.div>
+      />
       
       {/* Outer ring effect */}
       <motion.div
         className="fixed pointer-events-none z-[9998] rounded-full border border-white/20"
         style={{
-          height: cursorVariant === 'default' ? 44 : 100,
-          width: cursorVariant === 'default' ? 44 : 100
+          height: cursorVariant === 'default' ? 30 : 60,
+          width: cursorVariant === 'default' ? 30 : 60
         }}
         animate={ringControls}
         initial={{ opacity: 0 }}
